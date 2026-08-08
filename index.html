@@ -192,9 +192,8 @@
     box-shadow: inset 0 0 0 1px var(--cardboard-dark);
   }
   .plan-card .desc{font-size:.9rem;color:var(--ink-soft);flex:1;margin-bottom:16px;}
-  .plan-card .price{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--moss-dark);margin-bottom:4px;}
+  .plan-card .price{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--moss-dark);margin-bottom:16px;}
   .plan-card .price small{font-family:'Karla',sans-serif;font-size:.75rem;font-weight:600;color:var(--ink-soft);}
-  .plan-card .price-edit{font-size:.72rem;color:var(--barn);font-family:'Space Mono',monospace;margin-bottom:14px;}
   .plan-card button{
     width:100%;justify-content:center;
   }
@@ -398,7 +397,7 @@
   <div class="wrap">
     <div class="label-row"><span class="stamp">Escolha o seu</span><span class="rule"></span></div>
     <h2>Planos de assinatura semanal</h2>
-    <p class="lede">Preços a definir pela equipe da granja — ajuste os valores abaixo antes de publicar o site.</p>
+    <p class="lede">Escolha a quantidade que combina com a sua casa. O valor é semanal e a retirada é feita na igreja.</p>
     <div class="plans" id="plans-grid"></div>
   </div>
 </section>
@@ -512,9 +511,9 @@
 // ---------- CONFIG (edite aqui) ----------
 const WHATSAPP_NUMBER = "5511952200001"; // número da granja
 const PLANS = [
-  { id:"duzia", nome:"Dúzia",       qty:12, cols:6, rows:2, desc:"O plano mais escolhido pelas famílias.",      price:"00,00", featured:true  },
-  { id:"vinte", nome:"Cartela de 20", qty:20, cols:5, rows:4, desc:"Pra quem gosta de repartir com o vizinho.",  price:"00,00", featured:false },
-  { id:"caixa", nome:"Caixa Cheia", qty:30, cols:6, rows:5, desc:"Ideal pra casa cheia ou pequenos negócios.",   price:"00,00", featured:false },
+  { id:"duzia", nome:"Dúzia",       qty:12, cols:6, rows:2, desc:"O plano mais escolhido pelas famílias.",      price:"13,00", featured:true  },
+  { id:"vinte", nome:"Cartela de 20", qty:20, cols:5, rows:4, desc:"Pra quem gosta de repartir com o vizinho.",  price:"22,00", featured:false },
+  { id:"caixa", nome:"Caixa Cheia", qty:30, cols:6, rows:5, desc:"Ideal pra casa cheia ou pequenos negócios.",   price:"28,00", featured:false },
 ];
 // ------------------------------------------
 
@@ -549,7 +548,6 @@ PLANS.forEach(plan => {
     <div class="carton-holder">${buildCartonSVG(plan.cols, plan.rows)}</div>
     <p class="desc">${plan.desc}</p>
     <div class="price">${money(plan.price)}<small> /semana</small></div>
-    <div class="price-edit">edite o preço no código-fonte</div>
     <button type="button" class="btn btn-primary" data-plan="${plan.id}">Assinar ${plan.nome}</button>
   `;
   grid.appendChild(card);
