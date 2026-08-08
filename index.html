@@ -162,7 +162,7 @@
   .about-stats span{font-size:.85rem;color:#C9C2AA;}
 
   /* PLANOS / CARTONS */
-  .plans{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:44px;}
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;}
   @media (max-width:1000px){.plans{grid-template-columns:1fr 1fr;}}
   @media (max-width:560px){.plans{grid-template-columns:1fr;}}
   .plan-card{
@@ -347,7 +347,7 @@
       <div class="step">
         <div class="num">1</div>
         <h3>Escolha seu plano</h3>
-        <p>Meia dúzia, dúzia, dúzia e meia ou caixa cheia — do jeito que a sua casa precisa.</p>
+        <p>12, 20 ou 30 ovos por semana — do jeito que a sua casa precisa.</p>
       </div>
       <div class="step">
         <div class="num">2</div>
@@ -512,10 +512,9 @@
 // ---------- CONFIG (edite aqui) ----------
 const WHATSAPP_NUMBER = "5511952200001"; // número da granja
 const PLANS = [
-  { id:"meia",   nome:"Meia Dúzia",     qty:6,  cols:3, rows:2, desc:"Pra quem mora só ou economiza no fogão.", price:"00,00", featured:false },
-  { id:"duzia",  nome:"Dúzia",          qty:12, cols:6, rows:2, desc:"O plano mais escolhido pelas famílias.",  price:"00,00", featured:true  },
-  { id:"duziaemeia", nome:"Dúzia e Meia", qty:18, cols:6, rows:3, desc:"Pra quem gosta de repartir com o vizinho.", price:"00,00", featured:false },
-  { id:"caixa",  nome:"Caixa Cheia",    qty:30, cols:6, rows:5, desc:"Ideal pra casa cheia ou pequenos negócios.", price:"00,00", featured:false },
+  { id:"duzia", nome:"Dúzia",       qty:12, cols:6, rows:2, desc:"O plano mais escolhido pelas famílias.",      price:"00,00", featured:true  },
+  { id:"vinte", nome:"Cartela de 20", qty:20, cols:5, rows:4, desc:"Pra quem gosta de repartir com o vizinho.",  price:"00,00", featured:false },
+  { id:"caixa", nome:"Caixa Cheia", qty:30, cols:6, rows:5, desc:"Ideal pra casa cheia ou pequenos negócios.",   price:"00,00", featured:false },
 ];
 // ------------------------------------------
 
