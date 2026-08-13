@@ -212,6 +212,16 @@
     font-size:.85rem;
     color:var(--ink-soft);
   }
+  .cutoff-note{
+    background:var(--cream);
+    border:1.5px solid var(--moss-mid);
+    border-left-width:5px;
+    border-radius:10px;
+    padding:12px 14px;
+    display:flex;flex-direction:column;gap:4px;
+  }
+  .cutoff-note strong{font-size:.95rem;color:var(--moss-dark);}
+  .cutoff-note span{font-size:.8rem;color:var(--ink-soft);line-height:1.5;}
   form{display:flex;flex-direction:column;gap:16px;}
   .field label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;color:var(--moss-dark);}
   .field input, .field select, .field textarea{
@@ -353,7 +363,7 @@
       <div class="step">
         <div class="num">2</div>
         <h3>Retire na igreja</h3>
-        <p>Toda semana, no dia combinado, seus ovos fresquinhos estarão te esperando na igreja.</p>
+        <p>Pedidos até sexta são retirados no domingo. A partir de sábado, a retirada fica para o domingo seguinte.</p>
       </div>
       <div class="step">
         <div class="num">3</div>
@@ -450,6 +460,11 @@
           </div>
         </div>
 
+        <div class="cutoff-note">
+          <strong>Sua primeira retirada: <span id="dataRetirada">—</span></strong>
+          <span>Pedidos feitos até sexta-feira entram na lista deste domingo. A partir de sábado a lista da semana já está fechada, e a retirada fica para o domingo seguinte.</span>
+        </div>
+
         <div class="field">
           <label for="obs">Observações (opcional)</label>
           <textarea id="obs" name="obs" rows="3" placeholder="Alguma preferência ou dúvida?"></textarea>
@@ -472,7 +487,7 @@
     <div class="faq-list">
       <details class="faq-item" open>
         <summary class="faq-q">Quando começo a receber meus ovos?<span class="plus">+</span></summary>
-        <div class="faq-a">Assim que sua assinatura for confirmada pelo WhatsApp, você já entra na lista de retirada da semana seguinte, no dia escolhido.</div>
+        <div class="faq-a">A lista de cada semana fecha na sexta-feira. Se você assinar até sexta, já retira no domingo seguinte. Assinaturas feitas no sábado entram na lista da próxima semana, com retirada no outro domingo.</div>
       </details>
       <details class="faq-item">
         <summary class="faq-q">Posso cancelar quando quiser?<span class="plus">+</span></summary>
@@ -584,6 +599,23 @@ chipRow.addEventListener('click', (e)=>{
   selectPlan(chip.dataset.plan);
 });
 
+/* Regra de corte da lista semanal:
+   pedido feito de domingo a sexta  -> retirada no próximo domingo;
+   pedido feito no sábado           -> lista já fechada, retirada no outro domingo. */
+function proximaRetirada(hoje = new Date()){
+  const d = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+  const dow = d.getDay();                    // 0 = domingo ... 6 = sábado
+  d.setDate(d.getDate() + (dow === 6 ? 8 : 7 - dow));
+  return d;
+}
+
+function retiradaTexto(){
+  const d = proximaRetirada();
+  return `domingo, ${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+
+document.getElementById('dataRetirada').textContent = retiradaTexto();
+
 document.getElementById('subForm').addEventListener('submit', function(e){
   e.preventDefault();
   const nome = document.getElementById('nome').value.trim();
@@ -597,6 +629,7 @@ document.getElementById('subForm').addEventListener('submit', function(e){
     `Nome: ${nome}`,
     `Plano: ${selectedPlan.nome} (${selectedPlan.qty} ovos/semana)`,
     `Dia de retirada: ${dia}`,
+    `Primeira retirada: ${retiradaTexto()}`,
     `Membro da igreja: ${membro}`,
     obs ? `Observações: ${obs}` : null,
     `Meu WhatsApp: ${whats}`,
