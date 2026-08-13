@@ -4,7 +4,10 @@
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
-      "Bash(grep *)"
+      "Bash(grep *)",
+      "Read(//Users/mdiasmarinho/Documents/projects/**)",
+      "Bash(python3 -c \"import PIL; print\\('PIL', PIL.__version__\\)\")",
+      "Bash(python3 -)"
     ]
   }
 }
