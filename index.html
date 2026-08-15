@@ -212,6 +212,34 @@
     font-size:.85rem;
     color:var(--ink-soft);
   }
+  .pix-box{
+    margin-top:18px;
+    background:var(--cream);
+    border:1.5px solid var(--moss-mid);
+    border-radius:14px;
+    padding:18px;
+  }
+  .pix-box h3{
+    font-family:'Fraunces',serif;font-size:1.05rem;color:var(--moss-dark);
+    margin:0 0 10px;display:flex;align-items:center;gap:8px;
+  }
+  .pix-key{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    background:var(--card);border:1.5px dashed var(--moss-mid);border-radius:10px;
+    padding:10px 12px;margin-bottom:8px;
+  }
+  .pix-key code{
+    font-family:'Karla',sans-serif;font-size:1.05rem;font-weight:700;
+    color:var(--moss-dark);letter-spacing:.02em;
+  }
+  .pix-copy{
+    border:1.5px solid var(--moss);background:transparent;color:var(--moss-dark);
+    font-family:'Karla',sans-serif;font-size:.8rem;font-weight:700;
+    padding:7px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  }
+  .pix-copy:hover{background:var(--moss);color:var(--cream);}
+  .pix-box p{font-size:.82rem;color:var(--ink-soft);line-height:1.55;margin:0;}
+  .pix-box .pix-owner{font-size:.85rem;color:var(--ink);margin-bottom:10px;}
   .cutoff-note{
     background:var(--cream);
     border:1.5px solid var(--moss-mid);
@@ -421,8 +449,20 @@
     <p class="lede">Envie sua assinatura pelo WhatsApp da granja. Um responsável confirma seu plano, o dia de retirada e a forma de pagamento com você.</p>
 
     <div class="form-grid">
-      <div class="form-note">
-        <strong>Sobre esta versão do site:</strong> este é o formulário inicial. Ele organiza o pedido e abre o WhatsApp da granja com tudo preenchido — ainda não cobra automaticamente. Para cobrança recorrente automática (cartão/Pix todo mês), o próximo passo é integrar um meio de pagamento como Mercado Pago, Pagar.me ou Asaas.
+      <div class="form-aside">
+        <div class="form-note">
+          <strong>Sobre esta versão do site:</strong> este é o formulário inicial. Ele organiza o pedido e abre o WhatsApp da granja com tudo preenchido — ainda não cobra automaticamente. Para cobrança recorrente automática (cartão/Pix todo mês), o próximo passo é integrar um meio de pagamento como Mercado Pago, Pagar.me ou Asaas.
+        </div>
+
+        <div class="pix-box">
+          <h3>Pagamento por Pix</h3>
+          <div class="pix-owner">Chave Pix (celular) em nome de <strong id="pixTitular">—</strong>:</div>
+          <div class="pix-key">
+            <code id="pixChave">—</code>
+            <button type="button" class="pix-copy" id="pixCopy">Copiar chave</button>
+          </div>
+          <p>Faça o Pix depois que a granja confirmar sua assinatura pelo WhatsApp, e envie o comprovante na mesma conversa.</p>
+        </div>
       </div>
       <form id="subForm">
         <div class="field-row">
@@ -475,7 +515,7 @@
           <button type="submit" class="btn btn-primary">Enviar assinatura pelo WhatsApp</button>
           <span class="form-hint">Ao enviar, abrimos o WhatsApp com sua mensagem pronta — é só confirmar o envio.</span>
         </div>
-        <div class="form-success" id="formSuccess">Prontinho! Confirme o envio no WhatsApp que abriu — a equipe da granja te responde por lá.</div>
+        <div class="form-success" id="formSuccess">Prontinho! Confirme o envio no WhatsApp que abriu — a equipe da granja te responde por lá. O pagamento é por Pix, na chave (11) 95220-0001, em nome de Uelton, depois da confirmação.</div>
       </form>
     </div>
   </div>
@@ -489,6 +529,10 @@
       <details class="faq-item" open>
         <summary class="faq-q">Quando começo a receber meus ovos?<span class="plus">+</span></summary>
         <div class="faq-a">A lista de cada semana fecha na sexta-feira. Se você assinar até sexta, já retira no domingo seguinte. Assinaturas feitas no sábado entram na lista da próxima semana, com retirada no outro domingo.</div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">Como faço o pagamento?<span class="plus">+</span></summary>
+        <div class="faq-a">O pagamento é por Pix, na chave <strong>(11) 95220-0001</strong> (celular), em nome de Uelton. Faça o Pix depois que a granja confirmar sua assinatura pelo WhatsApp e envie o comprovante na mesma conversa.</div>
       </details>
       <details class="faq-item">
         <summary class="faq-q">Posso cancelar quando quiser?<span class="plus">+</span></summary>
@@ -528,6 +572,8 @@
 <script>
 // ---------- CONFIG (edite aqui) ----------
 const WHATSAPP_NUMBER = "5511952200001"; // número da granja
+const PIX_CHAVE   = "(11) 95220-0001";   // chave Pix (celular) da granja
+const PIX_TITULAR = "Uelton";            // titular da chave Pix
 const PLANS = [
   { id:"duzia", nome:"Cartela de 12", qty:12, cols:6, rows:2, desc:"O plano mais escolhido pelas famílias.",      price:"15,00", featured:true },
   { id:"vinte", nome:"Cartela de 20", qty:20, cols:5, rows:4, desc:"Pra quem gosta de repartir com o vizinho.",  price:"25,00", featured:false },
@@ -598,6 +644,27 @@ chipRow.addEventListener('click', (e)=>{
   const chip = e.target.closest('.plan-chip');
   if(!chip) return;
   selectPlan(chip.dataset.plan);
+});
+
+// ---------- PIX ----------
+document.getElementById('pixChave').textContent = PIX_CHAVE;
+document.getElementById('pixTitular').textContent = PIX_TITULAR;
+
+document.getElementById('pixCopy').addEventListener('click', async function(){
+  const btn = this;
+  try{
+    await navigator.clipboard.writeText(PIX_CHAVE);
+  }catch(err){
+    // navegadores antigos ou páginas sem HTTPS: seleciona o texto para copiar na mão
+    const r = document.createRange();
+    r.selectNodeContents(document.getElementById('pixChave'));
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(r);
+    return;
+  }
+  btn.textContent = 'Chave copiada!';
+  setTimeout(()=>{ btn.textContent = 'Copiar chave'; }, 2000);
 });
 
 /* Mude para true quando quiser voltar a mostrar a data calculada da
