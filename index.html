@@ -443,12 +443,13 @@
 
         <div class="field-row">
           <div class="field">
-            <label for="dia">Dia preferido de retirada</label>
+            <label for="dia">Dia de retirada</label>
             <select id="dia" name="dia">
               <option>Domingo — culto da manhã</option>
+              <!-- Opções desativadas por enquanto; é só descomentar para voltar.
               <option>Domingo — culto da noite</option>
-              <option>Quarta-feira — reunião de oração</option>
               <option>A combinar</option>
+              -->
             </select>
           </div>
           <div class="field">
@@ -461,7 +462,7 @@
         </div>
 
         <div class="cutoff-note">
-          <strong>Sua primeira retirada: <span id="dataRetirada">—</span></strong>
+          <strong id="linhaRetirada" hidden>Sua primeira retirada: <span id="dataRetirada">—</span></strong>
           <span>Pedidos feitos até sexta-feira entram na lista deste domingo. A partir de sábado a lista da semana já está fechada, e a retirada fica para o domingo seguinte.</span>
         </div>
 
@@ -528,9 +529,9 @@
 // ---------- CONFIG (edite aqui) ----------
 const WHATSAPP_NUMBER = "5511952200001"; // número da granja
 const PLANS = [
-  { id:"duzia", nome:"Dúzia",       qty:12, cols:6, rows:2, desc:"O plano mais escolhido pelas famílias.",      price:"15,00", featured:true },
+  { id:"duzia", nome:"Cartela de 12", qty:12, cols:6, rows:2, desc:"O plano mais escolhido pelas famílias.",      price:"15,00", featured:true },
   { id:"vinte", nome:"Cartela de 20", qty:20, cols:5, rows:4, desc:"Pra quem gosta de repartir com o vizinho.",  price:"25,00", featured:false },
-  { id:"caixa", nome:"Caixa Cheia", qty:30, cols:6, rows:5, desc:"Ideal pra casa cheia ou pequenos negócios.",   price:"28,00", featured:false },
+  { id:"caixa", nome:"Cartela de 30", qty:30, cols:6, rows:5, desc:"Ideal pra casa cheia ou pequenos negócios.",   price:"28,00", featured:false },
 ];
 // ------------------------------------------
 
@@ -599,6 +600,10 @@ chipRow.addEventListener('click', (e)=>{
   selectPlan(chip.dataset.plan);
 });
 
+/* Mude para true quando quiser voltar a mostrar a data calculada da
+   primeira retirada (no formulário e na mensagem do WhatsApp). */
+const MOSTRAR_DATA_RETIRADA = false;
+
 /* Regra de corte da lista semanal:
    pedido feito de domingo a sexta  -> retirada no próximo domingo;
    pedido feito no sábado           -> lista já fechada, retirada no outro domingo. */
@@ -614,7 +619,10 @@ function retiradaTexto(){
   return `domingo, ${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
 }
 
-document.getElementById('dataRetirada').textContent = retiradaTexto();
+if(MOSTRAR_DATA_RETIRADA){
+  document.getElementById('dataRetirada').textContent = retiradaTexto();
+  document.getElementById('linhaRetirada').hidden = false;
+}
 
 document.getElementById('subForm').addEventListener('submit', function(e){
   e.preventDefault();
@@ -629,7 +637,7 @@ document.getElementById('subForm').addEventListener('submit', function(e){
     `Nome: ${nome}`,
     `Plano: ${selectedPlan.nome} (${selectedPlan.qty} ovos/semana)`,
     `Dia de retirada: ${dia}`,
-    `Primeira retirada: ${retiradaTexto()}`,
+    MOSTRAR_DATA_RETIRADA ? `Primeira retirada: ${retiradaTexto()}` : null,
     `Membro da igreja: ${membro}`,
     obs ? `Observações: ${obs}` : null,
     `Meu WhatsApp: ${whats}`,
