@@ -7,7 +7,11 @@
       "Bash(grep *)",
       "Read(//Users/mdiasmarinho/Documents/projects/**)",
       "Bash(python3 -c \"import PIL; print\\('PIL', PIL.__version__\\)\")",
-      "Bash(python3 -)"
+      "Bash(python3 -)",
+      "Bash(git check-ignore *)",
+      "Bash(git commit -q -m ' *)",
+      "Bash(git --no-pager log --oneline -1)",
+      "Bash(node --check page.js)"
     ]
   }
 }
