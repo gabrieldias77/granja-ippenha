@@ -267,13 +267,40 @@
   }
   .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
   @media (max-width:560px){.field-row{grid-template-columns:1fr;}}
-  .plan-chip-row{display:flex;flex-wrap:wrap;gap:8px;}
-  .plan-chip{
-    padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);
-    background:var(--cream);font-size:.85rem;font-weight:700;cursor:pointer;
-    color:var(--ink-soft);
+  .plan-qty-list{display:flex;flex-direction:column;gap:10px;}
+  .plan-qty{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    border:1.5px solid var(--line);border-radius:12px;background:var(--cream);
+    padding:10px 12px;
   }
-  .plan-chip[aria-pressed="true"]{background:var(--moss);border-color:var(--moss);color:#fff;}
+  .plan-qty.active{border-color:var(--moss-mid);background:#fff;}
+  .plan-qty .info b{display:block;font-size:.92rem;color:var(--moss-dark);}
+  .plan-qty .info span{font-size:.78rem;color:var(--ink-soft);}
+  .stepper{display:flex;align-items:center;gap:6px;}
+  .stepper button{
+    width:34px;height:34px;border-radius:999px;border:1.5px solid var(--moss);
+    background:transparent;color:var(--moss-dark);font-size:1.15rem;font-weight:700;
+    cursor:pointer;line-height:1;
+  }
+  .stepper button:hover{background:var(--moss);color:#fff;}
+  .stepper button:disabled{opacity:.35;cursor:not-allowed;}
+  .stepper button:disabled:hover{background:transparent;color:var(--moss-dark);}
+  .stepper input{
+    width:56px;text-align:center;padding:7px 4px;border-radius:8px;
+    border:1.5px solid var(--line);background:#fff;font-family:'Karla',sans-serif;
+    font-size:.95rem;font-weight:700;color:var(--ink);
+  }
+  .pedido-total{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    margin-top:12px;padding:12px 14px;border-radius:10px;
+    background:var(--moss-dark);color:#fff;font-size:.85rem;
+  }
+  .pedido-total b{font-family:'Fraunces',serif;font-size:1.15rem;color:#fff;}
+  .pedido-total.empty{
+    background:var(--cream);color:var(--ink-soft);
+    border:1.5px dashed var(--moss-mid);
+  }
+  .pedido-total.empty b{color:var(--ink-soft);font-size:.85rem;font-family:'Karla',sans-serif;}
   .form-actions{margin-top:6px;display:flex;flex-direction:column;gap:8px;}
   .form-hint{font-size:.78rem;color:var(--ink-soft);}
   .form-success{
@@ -437,7 +464,7 @@
   <div class="wrap">
     <div class="label-row"><span class="stamp">Escolha o seu</span><span class="rule"></span></div>
     <h2>Planos de assinatura semanal</h2>
-    <p class="lede">Escolha a quantidade que combina com a sua casa. O valor é semanal e a retirada é feita na igreja.</p>
+    <p class="lede">Escolha quantas cartelas de cada tamanho você quer por semana — dá para combinar (por exemplo, 3 cartelas de 12 e 3 de 30). O valor é semanal e a retirada é feita na igreja.</p>
     <div class="plans" id="plans-grid"></div>
   </div>
 </section>
@@ -477,8 +504,12 @@
         </div>
 
         <div class="field">
-          <label>Plano</label>
-          <div class="plan-chip-row" id="chipRow"></div>
+          <label>Suas cartelas por semana</label>
+          <div class="plan-qty-list" id="qtyList"></div>
+          <div class="pedido-total empty" id="pedidoTotal">
+            <span id="totalResumo">Escolha pelo menos uma cartela acima.</span>
+            <b id="totalValor"></b>
+          </div>
         </div>
 
         <div class="field-row">
@@ -529,6 +560,10 @@
       <details class="faq-item" open>
         <summary class="faq-q">Quando começo a receber meus ovos?<span class="plus">+</span></summary>
         <div class="faq-a">A lista de cada semana fecha na sexta-feira. Se você assinar até sexta, já retira no domingo seguinte. Assinaturas feitas no sábado entram na lista da próxima semana, com retirada no outro domingo.</div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">Posso pedir mais de uma cartela?<span class="plus">+</span></summary>
+        <div class="faq-a">Pode sim, e pode misturar os tamanhos. No formulário você escolhe a quantidade de cada cartela — por exemplo, 3 cartelas de 12 e 3 de 30 na mesma semana. O total é calculado automaticamente antes do envio.</div>
       </details>
       <details class="faq-item">
         <summary class="faq-q">Como faço o pagamento?<span class="plus">+</span></summary>
@@ -596,11 +631,24 @@ function buildCartonSVG(cols, rows){
   return `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" aria-label="Cartela com ${cols*rows} ovos">${eggs}</svg>`;
 }
 
-function money(v){ return `R$ ${v}`; }
+/* Quantidade máxima de cartelas do mesmo tipo em um pedido. */
+const MAX_POR_CARTELA = 20;
+
+/* Converte o preço escrito no formato brasileiro ("28,00") para número. */
+function precoNum(plan){
+  return parseFloat(String(plan.price).replace(/\./g,'').replace(',','.')) || 0;
+}
+
+function money(v){
+  return 'R$ ' + Number(v).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
 
 const grid = document.getElementById('plans-grid');
-const chipRow = document.getElementById('chipRow');
-let selectedPlan = PLANS.find(p=>p.featured) || PLANS[0];
+const qtyList = document.getElementById('qtyList');
+
+/* Quantidade escolhida de cada cartela: { duzia: 1, vinte: 0, caixa: 0 } */
+const pedido = {};
+PLANS.forEach(p => { pedido[p.id] = p.featured ? 1 : 0; });
 
 PLANS.forEach(plan => {
   const card = document.createElement('div');
@@ -611,40 +659,105 @@ PLANS.forEach(plan => {
     <div class="qty">${plan.qty} ovos por semana</div>
     <div class="carton-holder">${buildCartonSVG(plan.cols, plan.rows)}</div>
     <p class="desc">${plan.desc}</p>
-    <div class="price">${money(plan.price)}<small> /semana</small></div>
-    <button type="button" class="btn btn-primary" data-plan="${plan.id}">Assinar ${plan.nome}</button>
+    <div class="price">${money(precoNum(plan))}<small> /semana</small></div>
+    <button type="button" class="btn btn-primary" data-plan="${plan.id}">Adicionar ${plan.nome}</button>
   `;
   grid.appendChild(card);
 
-  const chip = document.createElement('button');
-  chip.type = 'button';
-  chip.className = 'plan-chip';
-  chip.textContent = plan.nome;
-  chip.dataset.plan = plan.id;
-  chip.setAttribute('aria-pressed', plan.id === selectedPlan.id ? 'true' : 'false');
-  chipRow.appendChild(chip);
+  const row = document.createElement('div');
+  row.className = 'plan-qty';
+  row.dataset.plan = plan.id;
+  row.innerHTML = `
+    <div class="info">
+      <b>${plan.nome}</b>
+      <span>${plan.qty} ovos · ${money(precoNum(plan))} cada</span>
+    </div>
+    <div class="stepper">
+      <button type="button" data-step="-1" data-plan="${plan.id}" aria-label="Tirar uma ${plan.nome}">−</button>
+      <input type="number" inputmode="numeric" min="0" max="${MAX_POR_CARTELA}" step="1"
+             value="${pedido[plan.id]}" data-plan="${plan.id}" aria-label="Quantidade de ${plan.nome}">
+      <button type="button" data-step="1" data-plan="${plan.id}" aria-label="Somar uma ${plan.nome}">+</button>
+    </div>
+  `;
+  qtyList.appendChild(row);
 });
 
-function selectPlan(id){
-  selectedPlan = PLANS.find(p=>p.id===id) || selectedPlan;
-  document.querySelectorAll('.plan-chip').forEach(c=>{
-    c.setAttribute('aria-pressed', c.dataset.plan === id ? 'true' : 'false');
-  });
+function itensDoPedido(){
+  return PLANS
+    .filter(p => pedido[p.id] > 0)
+    .map(p => ({
+      plan: p,
+      unid: pedido[p.id],
+      ovos: pedido[p.id] * p.qty,
+      valor: pedido[p.id] * precoNum(p),
+    }));
 }
+
+function totaisDoPedido(){
+  const itens = itensDoPedido();
+  return {
+    itens,
+    cartelas: itens.reduce((t,i)=> t + i.unid, 0),
+    ovos:     itens.reduce((t,i)=> t + i.ovos, 0),
+    valor:    itens.reduce((t,i)=> t + i.valor, 0),
+  };
+}
+
+function setQty(id, valor){
+  if(!(id in pedido)) return;
+  const n = Math.max(0, Math.min(MAX_POR_CARTELA, Math.floor(Number(valor) || 0)));
+  pedido[id] = n;
+  renderPedido();
+}
+
+function renderPedido(){
+  PLANS.forEach(plan => {
+    const row = qtyList.querySelector(`.plan-qty[data-plan="${plan.id}"]`);
+    const input = row.querySelector('input');
+    if(input.value !== String(pedido[plan.id])) input.value = pedido[plan.id];
+    row.classList.toggle('active', pedido[plan.id] > 0);
+    row.querySelector('button[data-step="-1"]').disabled = pedido[plan.id] <= 0;
+    row.querySelector('button[data-step="1"]').disabled  = pedido[plan.id] >= MAX_POR_CARTELA;
+  });
+
+  const t = totaisDoPedido();
+  const box = document.getElementById('pedidoTotal');
+  const resumo = document.getElementById('totalResumo');
+  const valor = document.getElementById('totalValor');
+
+  if(t.cartelas === 0){
+    box.classList.add('empty');
+    resumo.textContent = 'Escolha pelo menos uma cartela acima.';
+    valor.textContent = '';
+    return;
+  }
+  box.classList.remove('empty');
+  const partes = t.itens.map(i => `${i.unid}x ${i.plan.nome}`).join(' + ');
+  resumo.textContent = `${partes} = ${t.ovos} ovos por semana`;
+  valor.textContent = `${money(t.valor)} /semana`;
+}
+
+qtyList.addEventListener('click', (e)=>{
+  const btn = e.target.closest('button[data-step]');
+  if(!btn) return;
+  setQty(btn.dataset.plan, pedido[btn.dataset.plan] + Number(btn.dataset.step));
+});
+
+qtyList.addEventListener('input', (e)=>{
+  const input = e.target.closest('input[data-plan]');
+  if(!input) return;
+  setQty(input.dataset.plan, input.value);
+});
 
 grid.addEventListener('click', (e)=>{
   const btn = e.target.closest('button[data-plan]');
   if(!btn) return;
-  selectPlan(btn.dataset.plan);
+  setQty(btn.dataset.plan, pedido[btn.dataset.plan] + 1);
   document.getElementById('assinar').scrollIntoView({behavior:'smooth'});
   document.getElementById('nome').focus({preventScroll:true});
 });
 
-chipRow.addEventListener('click', (e)=>{
-  const chip = e.target.closest('.plan-chip');
-  if(!chip) return;
-  selectPlan(chip.dataset.plan);
-});
+renderPedido();
 
 // ---------- PIX ----------
 document.getElementById('pixChave').textContent = PIX_CHAVE;
@@ -693,6 +806,14 @@ if(MOSTRAR_DATA_RETIRADA){
 
 document.getElementById('subForm').addEventListener('submit', function(e){
   e.preventDefault();
+
+  const t = totaisDoPedido();
+  if(t.cartelas === 0){
+    alert('Escolha pelo menos uma cartela para enviar sua assinatura.');
+    document.getElementById('qtyList').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+
   const nome = document.getElementById('nome').value.trim();
   const whats = document.getElementById('whats').value.trim();
   const dia = document.getElementById('dia').value;
@@ -700,9 +821,11 @@ document.getElementById('subForm').addEventListener('submit', function(e){
   const obs = document.getElementById('obs').value.trim();
 
   const msg = [
-    `Olá! Quero assinar a Granja da Penha 🥚`,
+    `Olá! Quero assinar semanalmente`,
     `Nome: ${nome}`,
-    `Plano: ${selectedPlan.nome} (${selectedPlan.qty} ovos/semana)`,
+    `Pedido:`,
+    ...t.itens.map(i => `- ${i.unid}x ${i.plan.nome} (${i.ovos} ovos) — ${money(i.valor)}`),
+    `Total: ${t.cartelas} cartela(s), ${t.ovos} ovos por semana — ${money(t.valor)}/semana`,
     `Dia de retirada: ${dia}`,
     MOSTRAR_DATA_RETIRADA ? `Primeira retirada: ${retiradaTexto()}` : null,
     `Membro da igreja: ${membro}`,
