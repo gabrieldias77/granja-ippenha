@@ -196,117 +196,56 @@
   .plan-card .desc{font-size:.9rem;color:var(--ink-soft);flex:1;margin-bottom:16px;}
   .plan-card .price{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--moss-dark);margin-bottom:16px;}
   .plan-card .price small{font-family:'Karla',sans-serif;font-size:.75rem;font-weight:600;color:var(--ink-soft);}
-  .plan-card button{
+  .plan-card .btn{
     width:100%;justify-content:center;
   }
 
-  /* FORM */
+  /* PAGAMENTO / CHECKOUT */
   .form-section{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-  .form-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:52px;margin-top:36px;align-items:flex-start;}
-  @media (max-width:900px){.form-grid{grid-template-columns:1fr;}}
-  .form-note{
-    background:var(--cream);
-    border:1px dashed var(--barn);
-    border-radius:14px;
-    padding:16px 18px;
-    font-size:.85rem;
-    color:var(--ink-soft);
-  }
-  .pix-box{
-    margin-top:18px;
+  .checkout-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;margin-top:36px;align-items:start;}
+  @media (max-width:900px){.checkout-grid{grid-template-columns:1fr;}}
+  .checkout-card{
     background:var(--cream);
     border:1.5px solid var(--moss-mid);
     border-radius:14px;
-    padding:18px;
+    padding:24px;
   }
-  .pix-box h3{
-    font-family:'Fraunces',serif;font-size:1.05rem;color:var(--moss-dark);
-    margin:0 0 10px;display:flex;align-items:center;gap:8px;
+  .checkout-card h3{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--moss-dark);margin:0 0 14px;}
+  .checkout-steps{
+    margin:0;padding-left:20px;
+    display:flex;flex-direction:column;gap:8px;
+    color:var(--ink-soft);font-size:.92rem;line-height:1.55;
   }
-  .pix-key{
+  .checkout-steps li::marker{color:var(--yolk-deep);font-weight:700;}
+  .checkout-links{display:flex;flex-direction:column;gap:10px;margin-top:22px;}
+  .checkout-link{
     display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
-    background:var(--card);border:1.5px dashed var(--moss-mid);border-radius:10px;
-    padding:10px 12px;margin-bottom:8px;
+    background:var(--card);border:1.5px solid var(--line);border-radius:12px;
+    padding:12px 14px;text-decoration:none;
+    transition:border-color .15s ease, transform .15s ease;
   }
-  .pix-key code{
-    font-family:'Karla',sans-serif;font-size:1.05rem;font-weight:700;
-    color:var(--moss-dark);letter-spacing:.02em;
+  .checkout-link:hover{border-color:var(--moss-mid);transform:translateY(-1px);}
+  .checkout-link .info b{display:block;font-size:.95rem;color:var(--moss-dark);}
+  .checkout-link .info span{font-size:.78rem;color:var(--ink-soft);}
+  .checkout-link .go{
+    font-family:'Karla',sans-serif;font-weight:800;font-size:.85rem;
+    color:var(--barn);white-space:nowrap;
   }
-  .pix-copy{
-    border:1.5px solid var(--moss);background:transparent;color:var(--moss-dark);
-    font-family:'Karla',sans-serif;font-size:.8rem;font-weight:700;
-    padding:7px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;
-  }
-  .pix-copy:hover{background:var(--moss);color:var(--cream);}
-  .pix-box p{font-size:.82rem;color:var(--ink-soft);line-height:1.55;margin:0;}
-  .pix-box .pix-owner{font-size:.85rem;color:var(--ink);margin-bottom:10px;}
+  .checkout-card.help{background:var(--moss-dark);border-color:var(--moss-dark);}
+  .checkout-card.help h3{color:#fff;}
+  .checkout-card.help p{font-size:.92rem;color:#D9D2BC;margin:0 0 18px;line-height:1.6;}
+  .checkout-hint{display:block;margin-top:12px;font-size:.78rem;color:#A8A28C;}
   .cutoff-note{
     background:var(--cream);
     border:1.5px solid var(--moss-mid);
     border-left-width:5px;
     border-radius:10px;
     padding:12px 14px;
+    margin-top:28px;
     display:flex;flex-direction:column;gap:4px;
   }
   .cutoff-note strong{font-size:.95rem;color:var(--moss-dark);}
   .cutoff-note span{font-size:.8rem;color:var(--ink-soft);line-height:1.5;}
-  form{display:flex;flex-direction:column;gap:16px;}
-  .field label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;color:var(--moss-dark);}
-  .field input, .field select, .field textarea{
-    width:100%;
-    padding:12px 14px;
-    border-radius:10px;
-    border:1.5px solid var(--line);
-    background:var(--cream);
-    font-family:'Karla',sans-serif;
-    font-size:.95rem;
-    color:var(--ink);
-  }
-  .field input:focus, .field select:focus, .field textarea:focus{
-    outline:none;border-color:var(--moss-mid);
-  }
-  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  @media (max-width:560px){.field-row{grid-template-columns:1fr;}}
-  .plan-qty-list{display:flex;flex-direction:column;gap:10px;}
-  .plan-qty{
-    display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
-    border:1.5px solid var(--line);border-radius:12px;background:var(--cream);
-    padding:10px 12px;
-  }
-  .plan-qty.active{border-color:var(--moss-mid);background:#fff;}
-  .plan-qty .info b{display:block;font-size:.92rem;color:var(--moss-dark);}
-  .plan-qty .info span{font-size:.78rem;color:var(--ink-soft);}
-  .stepper{display:flex;align-items:center;gap:6px;}
-  .stepper button{
-    width:34px;height:34px;border-radius:999px;border:1.5px solid var(--moss);
-    background:transparent;color:var(--moss-dark);font-size:1.15rem;font-weight:700;
-    cursor:pointer;line-height:1;
-  }
-  .stepper button:hover{background:var(--moss);color:#fff;}
-  .stepper button:disabled{opacity:.35;cursor:not-allowed;}
-  .stepper button:disabled:hover{background:transparent;color:var(--moss-dark);}
-  .stepper input{
-    width:56px;text-align:center;padding:7px 4px;border-radius:8px;
-    border:1.5px solid var(--line);background:#fff;font-family:'Karla',sans-serif;
-    font-size:.95rem;font-weight:700;color:var(--ink);
-  }
-  .pedido-total{
-    display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
-    margin-top:12px;padding:12px 14px;border-radius:10px;
-    background:var(--moss-dark);color:#fff;font-size:.85rem;
-  }
-  .pedido-total b{font-family:'Fraunces',serif;font-size:1.15rem;color:#fff;}
-  .pedido-total.empty{
-    background:var(--cream);color:var(--ink-soft);
-    border:1.5px dashed var(--moss-mid);
-  }
-  .pedido-total.empty b{color:var(--ink-soft);font-size:.85rem;font-family:'Karla',sans-serif;}
-  .form-actions{margin-top:6px;display:flex;flex-direction:column;gap:8px;}
-  .form-hint{font-size:.78rem;color:var(--ink-soft);}
-  .form-success{
-    display:none;margin-top:14px;padding:14px 16px;border-radius:12px;
-    background:#E7F0DE;border:1px solid #B9CFA3;color:var(--moss-dark);font-size:.9rem;
-  }
 
   /* FAQ */
   .faq-list{margin-top:36px;border-top:1px solid var(--line);}
@@ -351,7 +290,7 @@
         <li><a href="#sobre">Sobre</a></li>
         <li><a href="#duvidas">Dúvidas</a></li>
       </ul>
-      <a href="#assinar" class="btn btn-primary" style="padding:10px 20px;">Quero assinar</a>
+      <a href="#planos" class="btn btn-primary" style="padding:10px 20px;">Quero assinar</a>
     </div>
   </nav>
 </header>
@@ -413,7 +352,7 @@
       <div class="step">
         <div class="num">1</div>
         <h3>Escolha seu plano</h3>
-        <p>12, 20 ou 30 ovos por semana — do jeito que a sua casa precisa.</p>
+        <p>12, 20 ou 30 ovos por semana — do jeito que a sua casa precisa. O pagamento é online, na hora.</p>
       </div>
       <div class="step">
         <div class="num">2</div>
@@ -464,7 +403,7 @@
   <div class="wrap">
     <div class="label-row"><span class="stamp">Escolha o seu</span><span class="rule"></span></div>
     <h2>Planos de assinatura semanal</h2>
-    <p class="lede">Escolha quantas cartelas de cada tamanho você quer por semana — dá para combinar (por exemplo, 3 cartelas de 12 e 3 de 30). O valor é semanal e a retirada é feita na igreja.</p>
+    <p class="lede">Escolha o tamanho da sua cartela e conclua o pagamento na página segura do Asaas. O valor é semanal e a retirada é feita na igreja.</p>
     <div class="plans" id="plans-grid"></div>
   </div>
 </section>
@@ -472,82 +411,31 @@
 <section class="section form-section" id="assinar">
   <div class="wrap">
     <div class="label-row"><span class="stamp">Assinatura</span><span class="rule"></span></div>
-    <h2>Preencha seus dados</h2>
-    <p class="lede">Envie sua assinatura pelo WhatsApp da granja. Um responsável confirma seu plano, o dia de retirada e a forma de pagamento com você.</p>
+    <h2>Escolha a cartela e pague online</h2>
+    <p class="lede">Agora é tudo pelo site: você clica na cartela que quer e é levado para a página de pagamento da granja no Asaas. É lá que você preenche seus dados e finaliza — sem precisar mandar mensagem nem enviar comprovante.</p>
 
-    <div class="form-grid">
-      <div class="form-aside">
-        <div class="form-note">
-          <strong>Sobre esta versão do site:</strong> este é o formulário inicial. Ele organiza o pedido e abre o WhatsApp da granja com tudo preenchido — ainda não cobra automaticamente. Para cobrança recorrente automática (cartão/Pix todo mês), o próximo passo é integrar um meio de pagamento como Mercado Pago, Pagar.me ou Asaas.
-        </div>
-
-        <div class="pix-box">
-          <h3>Pagamento por Pix</h3>
-          <div class="pix-owner">Chave Pix (celular) em nome de <strong id="pixTitular">—</strong>:</div>
-          <div class="pix-key">
-            <code id="pixChave">—</code>
-            <button type="button" class="pix-copy" id="pixCopy">Copiar chave</button>
-          </div>
-          <p>Faça o Pix depois que a granja confirmar sua assinatura pelo WhatsApp, e envie o comprovante na mesma conversa.</p>
-        </div>
+    <div class="checkout-grid">
+      <div class="checkout-card">
+        <h3>Como funciona</h3>
+        <ol class="checkout-steps">
+          <li>Escolha a cartela que você quer nos planos acima.</li>
+          <li>Você é levado para a página de pagamento segura do Asaas.</li>
+          <li>Preencha seus dados e conclua o pagamento por lá.</li>
+          <li>Prontinho: sua cartela entra na lista da semana e a retirada é no domingo, na igreja.</li>
+        </ol>
+        <div class="checkout-links" id="checkoutLinks"></div>
       </div>
-      <form id="subForm">
-        <div class="field-row">
-          <div class="field">
-            <label for="nome">Nome completo</label>
-            <input id="nome" name="nome" type="text" required placeholder="Seu nome">
-          </div>
-          <div class="field">
-            <label for="whats">WhatsApp</label>
-            <input id="whats" name="whats" type="tel" required placeholder="(11) 90000-0000">
-          </div>
-        </div>
 
-        <div class="field">
-          <label>Suas cartelas por semana</label>
-          <div class="plan-qty-list" id="qtyList"></div>
-          <div class="pedido-total empty" id="pedidoTotal">
-            <span id="totalResumo">Escolha pelo menos uma cartela acima.</span>
-            <b id="totalValor"></b>
-          </div>
-        </div>
+      <div class="checkout-card help">
+        <h3>Ficou com alguma dúvida?</h3>
+        <p>Fale com um responsável da granja pelo WhatsApp. A gente ajuda a escolher a cartela, tirar dúvidas do pagamento ou combinar a retirada.</p>
+        <a class="btn btn-primary" id="whatsHelp" href="#" target="_blank" rel="noopener">Falar no WhatsApp</a>
+        <span class="checkout-hint">Atendimento pelo WhatsApp da Granja da Penha.</span>
+      </div>
+    </div>
 
-        <div class="field-row">
-          <div class="field">
-            <label for="dia">Dia de retirada</label>
-            <select id="dia" name="dia">
-              <option>Domingo — culto da manhã</option>
-              <!-- Opções desativadas por enquanto; é só descomentar para voltar.
-              <option>Domingo — culto da noite</option>
-              <option>A combinar</option>
-              -->
-            </select>
-          </div>
-          <div class="field">
-            <label for="membro">Você é membro da igreja?</label>
-            <select id="membro" name="membro">
-              <option>Sim</option>
-              <option>Não, sou da comunidade</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="cutoff-note">
-          <strong id="linhaRetirada" hidden>Sua primeira retirada: <span id="dataRetirada">—</span></strong>
-          <span>Pedidos feitos até sexta-feira entram na lista deste domingo. A partir de sábado a lista da semana já está fechada, e a retirada fica para o domingo seguinte.</span>
-        </div>
-
-        <div class="field">
-          <label for="obs">Observações (opcional)</label>
-          <textarea id="obs" name="obs" rows="3" placeholder="Alguma preferência ou dúvida?"></textarea>
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Enviar assinatura pelo WhatsApp</button>
-          <span class="form-hint">Ao enviar, abrimos o WhatsApp com sua mensagem pronta — é só confirmar o envio.</span>
-        </div>
-        <div class="form-success" id="formSuccess">Prontinho! Confirme o envio no WhatsApp que abriu — a equipe da granja te responde por lá. O pagamento é por Pix, na chave (11) 97497-1743, em nome de Humberto, depois da confirmação.</div>
-      </form>
+    <div class="cutoff-note">
+      <span>Pedidos feitos até sexta-feira entram na lista deste domingo. A partir de sábado a lista da semana já está fechada, e a retirada fica para o domingo seguinte.</span>
     </div>
   </div>
 </section>
@@ -563,11 +451,11 @@
       </details>
       <details class="faq-item">
         <summary class="faq-q">Posso pedir mais de uma cartela?<span class="plus">+</span></summary>
-        <div class="faq-a">Pode sim, e pode misturar os tamanhos. No formulário você escolhe a quantidade de cada cartela — por exemplo, 3 cartelas de 12 e 3 de 30 na mesma semana. O total é calculado automaticamente antes do envio.</div>
+        <div class="faq-a">Pode sim, e pode misturar os tamanhos. Cada cartela tem o seu próprio link de pagamento: finalize uma e repita o processo para a próxima. Se preferir combinar um pedido maior de uma vez, chame a gente no WhatsApp.</div>
       </details>
       <details class="faq-item">
         <summary class="faq-q">Como faço o pagamento?<span class="plus">+</span></summary>
-        <div class="faq-a">O pagamento é por Pix, na chave <strong>(11) 97497-1743</strong> (celular), em nome de Humberto. Faça o Pix depois que a granja confirmar sua assinatura pelo WhatsApp e envie o comprovante na mesma conversa.</div>
+        <div class="faq-a">O pagamento é feito direto no site: ao escolher a cartela você é levado para a página de pagamento da granja no <strong>Asaas</strong>, onde preenche seus dados e finaliza. Não precisa mais enviar comprovante pelo WhatsApp — o Asaas confirma o pagamento pra gente.</div>
       </details>
       <details class="faq-item">
         <summary class="faq-q">Posso cancelar quando quiser?<span class="plus">+</span></summary>
@@ -606,13 +494,12 @@
 
 <script>
 // ---------- CONFIG (edite aqui) ----------
-const WHATSAPP_NUMBER = "5511984871478"; // número da granja
-const PIX_CHAVE   = "(11) 97497-1743";   // chave Pix (celular) da granja
-const PIX_TITULAR = "Humberto";            // titular da chave Pix
+const WHATSAPP_NUMBER = "5511984871478"; // número da granja (só para dúvidas)
+const WHATSAPP_MSG = "Olá! Vim pelo site da Granja da Penha e tenho uma dúvida sobre as cartelas de ovos.";
 const PLANS = [
-  { id:"duzia", nome:"Cartela de 12", qty:12, cols:6, rows:2, desc:"O plano mais escolhido pelas famílias.",      price:"15,00", featured:true },
-  { id:"vinte", nome:"Cartela de 20", qty:20, cols:5, rows:4, desc:"Pra quem gosta de repartir com o vizinho.",  price:"25,00", featured:false },
-  { id:"caixa", nome:"Cartela de 30", qty:30, cols:6, rows:5, desc:"Ideal pra casa cheia ou pequenos negócios.",   price:"28,00", featured:false },
+  { id:"duzia", nome:"Cartela de 12", qty:12, cols:6, rows:2, desc:"O plano mais escolhido pelas famílias.",      price:"15,00", featured:true,  checkout:"https://www.asaas.com/c/vkd91h8559v2nqw4" },
+  { id:"vinte", nome:"Cartela de 20", qty:20, cols:5, rows:4, desc:"Pra quem gosta de repartir com o vizinho.",  price:"25,00", featured:false, checkout:"https://www.asaas.com/c/3udm7urhm8ggogd2" },
+  { id:"caixa", nome:"Cartela de 30", qty:30, cols:6, rows:5, desc:"Ideal pra casa cheia ou pequenos negócios.",   price:"28,00", featured:false, checkout:"https://www.asaas.com/c/6lgsotyro6fnq97j" },
 ];
 // ------------------------------------------
 
@@ -631,9 +518,6 @@ function buildCartonSVG(cols, rows){
   return `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" aria-label="Cartela com ${cols*rows} ovos">${eggs}</svg>`;
 }
 
-/* Quantidade máxima de cartelas do mesmo tipo em um pedido. */
-const MAX_POR_CARTELA = 20;
-
 /* Converte o preço escrito no formato brasileiro ("28,00") para número. */
 function precoNum(plan){
   return parseFloat(String(plan.price).replace(/\./g,'').replace(',','.')) || 0;
@@ -644,11 +528,7 @@ function money(v){
 }
 
 const grid = document.getElementById('plans-grid');
-const qtyList = document.getElementById('qtyList');
-
-/* Quantidade escolhida de cada cartela: { duzia: 1, vinte: 0, caixa: 0 } */
-const pedido = {};
-PLANS.forEach(p => { pedido[p.id] = p.featured ? 1 : 0; });
+const checkoutLinks = document.getElementById('checkoutLinks');
 
 PLANS.forEach(plan => {
   const card = document.createElement('div');
@@ -660,186 +540,28 @@ PLANS.forEach(plan => {
     <div class="carton-holder">${buildCartonSVG(plan.cols, plan.rows)}</div>
     <p class="desc">${plan.desc}</p>
     <div class="price">${money(precoNum(plan))}<small> /semana</small></div>
-    <button type="button" class="btn btn-primary" data-plan="${plan.id}">Adicionar ${plan.nome}</button>
+    <a class="btn btn-primary" href="${plan.checkout}" target="_blank" rel="noopener">Assinar ${plan.nome}</a>
   `;
   grid.appendChild(card);
 
-  const row = document.createElement('div');
-  row.className = 'plan-qty';
-  row.dataset.plan = plan.id;
-  row.innerHTML = `
-    <div class="info">
+  const link = document.createElement('a');
+  link.className = 'checkout-link';
+  link.href = plan.checkout;
+  link.target = '_blank';
+  link.rel = 'noopener';
+  link.innerHTML = `
+    <span class="info">
       <b>${plan.nome}</b>
-      <span>${plan.qty} ovos · ${money(precoNum(plan))} cada</span>
-    </div>
-    <div class="stepper">
-      <button type="button" data-step="-1" data-plan="${plan.id}" aria-label="Tirar uma ${plan.nome}">−</button>
-      <input type="number" inputmode="numeric" min="0" max="${MAX_POR_CARTELA}" step="1"
-             value="${pedido[plan.id]}" data-plan="${plan.id}" aria-label="Quantidade de ${plan.nome}">
-      <button type="button" data-step="1" data-plan="${plan.id}" aria-label="Somar uma ${plan.nome}">+</button>
-    </div>
+      <span>${plan.qty} ovos · ${money(precoNum(plan))} /semana</span>
+    </span>
+    <span class="go">Pagar no Asaas →</span>
   `;
-  qtyList.appendChild(row);
+  checkoutLinks.appendChild(link);
 });
 
-function itensDoPedido(){
-  return PLANS
-    .filter(p => pedido[p.id] > 0)
-    .map(p => ({
-      plan: p,
-      unid: pedido[p.id],
-      ovos: pedido[p.id] * p.qty,
-      valor: pedido[p.id] * precoNum(p),
-    }));
-}
-
-function totaisDoPedido(){
-  const itens = itensDoPedido();
-  return {
-    itens,
-    cartelas: itens.reduce((t,i)=> t + i.unid, 0),
-    ovos:     itens.reduce((t,i)=> t + i.ovos, 0),
-    valor:    itens.reduce((t,i)=> t + i.valor, 0),
-  };
-}
-
-function setQty(id, valor){
-  if(!(id in pedido)) return;
-  const n = Math.max(0, Math.min(MAX_POR_CARTELA, Math.floor(Number(valor) || 0)));
-  pedido[id] = n;
-  renderPedido();
-}
-
-function renderPedido(){
-  PLANS.forEach(plan => {
-    const row = qtyList.querySelector(`.plan-qty[data-plan="${plan.id}"]`);
-    const input = row.querySelector('input');
-    if(input.value !== String(pedido[plan.id])) input.value = pedido[plan.id];
-    row.classList.toggle('active', pedido[plan.id] > 0);
-    row.querySelector('button[data-step="-1"]').disabled = pedido[plan.id] <= 0;
-    row.querySelector('button[data-step="1"]').disabled  = pedido[plan.id] >= MAX_POR_CARTELA;
-  });
-
-  const t = totaisDoPedido();
-  const box = document.getElementById('pedidoTotal');
-  const resumo = document.getElementById('totalResumo');
-  const valor = document.getElementById('totalValor');
-
-  if(t.cartelas === 0){
-    box.classList.add('empty');
-    resumo.textContent = 'Escolha pelo menos uma cartela acima.';
-    valor.textContent = '';
-    return;
-  }
-  box.classList.remove('empty');
-  const partes = t.itens.map(i => `${i.unid}x ${i.plan.nome}`).join(' + ');
-  resumo.textContent = `${partes} = ${t.ovos} ovos por semana`;
-  valor.textContent = `${money(t.valor)} /semana`;
-}
-
-qtyList.addEventListener('click', (e)=>{
-  const btn = e.target.closest('button[data-step]');
-  if(!btn) return;
-  setQty(btn.dataset.plan, pedido[btn.dataset.plan] + Number(btn.dataset.step));
-});
-
-qtyList.addEventListener('input', (e)=>{
-  const input = e.target.closest('input[data-plan]');
-  if(!input) return;
-  setQty(input.dataset.plan, input.value);
-});
-
-grid.addEventListener('click', (e)=>{
-  const btn = e.target.closest('button[data-plan]');
-  if(!btn) return;
-  setQty(btn.dataset.plan, pedido[btn.dataset.plan] + 1);
-  document.getElementById('assinar').scrollIntoView({behavior:'smooth'});
-  document.getElementById('nome').focus({preventScroll:true});
-});
-
-renderPedido();
-
-// ---------- PIX ----------
-document.getElementById('pixChave').textContent = PIX_CHAVE;
-document.getElementById('pixTitular').textContent = PIX_TITULAR;
-
-document.getElementById('pixCopy').addEventListener('click', async function(){
-  const btn = this;
-  try{
-    await navigator.clipboard.writeText(PIX_CHAVE);
-  }catch(err){
-    // navegadores antigos ou páginas sem HTTPS: seleciona o texto para copiar na mão
-    const r = document.createRange();
-    r.selectNodeContents(document.getElementById('pixChave'));
-    const sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(r);
-    return;
-  }
-  btn.textContent = 'Chave copiada!';
-  setTimeout(()=>{ btn.textContent = 'Copiar chave'; }, 2000);
-});
-
-/* Mude para true quando quiser voltar a mostrar a data calculada da
-   primeira retirada (no formulário e na mensagem do WhatsApp). */
-const MOSTRAR_DATA_RETIRADA = false;
-
-/* Regra de corte da lista semanal:
-   pedido feito de domingo a sexta  -> retirada no próximo domingo;
-   pedido feito no sábado           -> lista já fechada, retirada no outro domingo. */
-function proximaRetirada(hoje = new Date()){
-  const d = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
-  const dow = d.getDay();                    // 0 = domingo ... 6 = sábado
-  d.setDate(d.getDate() + (dow === 6 ? 8 : 7 - dow));
-  return d;
-}
-
-function retiradaTexto(){
-  const d = proximaRetirada();
-  return `domingo, ${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
-}
-
-if(MOSTRAR_DATA_RETIRADA){
-  document.getElementById('dataRetirada').textContent = retiradaTexto();
-  document.getElementById('linhaRetirada').hidden = false;
-}
-
-document.getElementById('subForm').addEventListener('submit', function(e){
-  e.preventDefault();
-
-  const t = totaisDoPedido();
-  if(t.cartelas === 0){
-    alert('Escolha pelo menos uma cartela para enviar sua assinatura.');
-    document.getElementById('qtyList').scrollIntoView({behavior:'smooth', block:'center'});
-    return;
-  }
-
-  const nome = document.getElementById('nome').value.trim();
-  const whats = document.getElementById('whats').value.trim();
-  const dia = document.getElementById('dia').value;
-  const membro = document.getElementById('membro').value;
-  const obs = document.getElementById('obs').value.trim();
-
-  const msg = [
-    `Olá! Quero assinar semanalmente`,
-    `Nome: ${nome}`,
-    `Pedido:`,
-    ...t.itens.map(i => `- ${i.unid}x ${i.plan.nome} (${i.ovos} ovos) — ${money(i.valor)}`),
-    `Total: ${t.cartelas} cartela(s), ${t.ovos} ovos por semana — ${money(t.valor)}/semana`,
-    `Dia de retirada: ${dia}`,
-    MOSTRAR_DATA_RETIRADA ? `Primeira retirada: ${retiradaTexto()}` : null,
-    `Membro da igreja: ${membro}`,
-    obs ? `Observações: ${obs}` : null,
-    `Meu WhatsApp: ${whats}`,
-  ].filter(Boolean).join('\n');
-
-  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-  window.open(url, '_blank');
-
-  document.getElementById('formSuccess').style.display = 'block';
-});
-
-// mobile nav (simple: links already stack via footer; add toggle if needed later)
+// ---------- WHATSAPP (só para dúvidas) ----------
+document.getElementById('whatsHelp').href =
+  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MSG)}`;
 </script>
 </body>
 </html>
