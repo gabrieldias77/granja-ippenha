@@ -200,41 +200,7 @@
     width:100%;justify-content:center;
   }
 
-  /* PAGAMENTO / CHECKOUT */
-  .form-section{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-  .checkout-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;margin-top:36px;align-items:start;}
-  @media (max-width:900px){.checkout-grid{grid-template-columns:1fr;}}
-  .checkout-card{
-    background:var(--cream);
-    border:1.5px solid var(--moss-mid);
-    border-radius:14px;
-    padding:24px;
-  }
-  .checkout-card h3{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--moss-dark);margin:0 0 14px;}
-  .checkout-steps{
-    margin:0;padding-left:20px;
-    display:flex;flex-direction:column;gap:8px;
-    color:var(--ink-soft);font-size:.92rem;line-height:1.55;
-  }
-  .checkout-steps li::marker{color:var(--yolk-deep);font-weight:700;}
-  .checkout-links{display:flex;flex-direction:column;gap:10px;margin-top:22px;}
-  .checkout-link{
-    display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
-    background:var(--card);border:1.5px solid var(--line);border-radius:12px;
-    padding:12px 14px;text-decoration:none;
-    transition:border-color .15s ease, transform .15s ease;
-  }
-  .checkout-link:hover{border-color:var(--moss-mid);transform:translateY(-1px);}
-  .checkout-link .info b{display:block;font-size:.95rem;color:var(--moss-dark);}
-  .checkout-link .info span{font-size:.78rem;color:var(--ink-soft);}
-  .checkout-link .go{
-    font-family:'Karla',sans-serif;font-weight:800;font-size:.85rem;
-    color:var(--barn);white-space:nowrap;
-  }
-  .checkout-card.help{background:var(--moss-dark);border-color:var(--moss-dark);}
-  .checkout-card.help h3{color:#fff;}
-  .checkout-card.help p{font-size:.92rem;color:#D9D2BC;margin:0 0 18px;line-height:1.6;}
-  .checkout-hint{display:block;margin-top:12px;font-size:.78rem;color:#A8A28C;}
+  /* NOTA DE CORTE + AJUDA */
   .cutoff-note{
     background:var(--cream);
     border:1.5px solid var(--moss-mid);
@@ -246,6 +212,14 @@
   }
   .cutoff-note strong{font-size:.95rem;color:var(--moss-dark);}
   .cutoff-note span{font-size:.8rem;color:var(--ink-soft);line-height:1.5;}
+  .help-row{
+    margin-top:16px;
+    display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    background:var(--card);border:1.5px solid var(--line);border-radius:14px;
+    padding:18px 20px;
+  }
+  .help-text b{display:block;font-family:'Fraunces',serif;font-size:1.05rem;color:var(--moss-dark);margin-bottom:4px;}
+  .help-text span{font-size:.88rem;color:var(--ink-soft);line-height:1.55;max-width:60ch;display:block;}
 
   /* FAQ */
   .faq-list{margin-top:36px;border-top:1px solid var(--line);}
@@ -405,37 +379,17 @@
     <h2>Planos de assinatura semanal</h2>
     <p class="lede">Escolha o tamanho da sua cartela e conclua o pagamento na página segura do Asaas. O valor é semanal e a retirada é feita na igreja.</p>
     <div class="plans" id="plans-grid"></div>
-  </div>
-</section>
-
-<section class="section form-section" id="assinar">
-  <div class="wrap">
-    <div class="label-row"><span class="stamp">Assinatura</span><span class="rule"></span></div>
-    <h2>Escolha a cartela e pague online</h2>
-    <p class="lede">Agora é tudo pelo site: você clica na cartela que quer e é levado para a página de pagamento da granja no Asaas. É lá que você preenche seus dados e finaliza — sem precisar mandar mensagem nem enviar comprovante.</p>
-
-    <div class="checkout-grid">
-      <div class="checkout-card">
-        <h3>Como funciona</h3>
-        <ol class="checkout-steps">
-          <li>Escolha a cartela que você quer nos planos acima.</li>
-          <li>Você é levado para a página de pagamento segura do Asaas.</li>
-          <li>Preencha seus dados e conclua o pagamento por lá.</li>
-          <li>Prontinho: sua cartela entra na lista da semana e a retirada é no domingo, na igreja.</li>
-        </ol>
-        <div class="checkout-links" id="checkoutLinks"></div>
-      </div>
-
-      <div class="checkout-card help">
-        <h3>Ficou com alguma dúvida?</h3>
-        <p>Fale com um responsável da granja pelo WhatsApp. A gente ajuda a escolher a cartela, tirar dúvidas do pagamento ou combinar a retirada.</p>
-        <a class="btn btn-primary" id="whatsHelp" href="#" target="_blank" rel="noopener">Falar no WhatsApp</a>
-        <span class="checkout-hint">Atendimento pelo WhatsApp da Granja da Penha.</span>
-      </div>
-    </div>
 
     <div class="cutoff-note">
       <span>Pedidos feitos até sexta-feira entram na lista deste domingo. A partir de sábado a lista da semana já está fechada, e a retirada fica para o domingo seguinte.</span>
+    </div>
+
+    <div class="help-row">
+      <div class="help-text">
+        <b>Ficou com alguma dúvida?</b>
+        <span>Fale com um responsável da granja pelo WhatsApp — a gente ajuda a escolher a cartela, tirar dúvidas do pagamento ou combinar a retirada.</span>
+      </div>
+      <a class="btn btn-ghost" id="whatsHelp" href="#" target="_blank" rel="noopener">Falar no WhatsApp</a>
     </div>
   </div>
 </section>
@@ -528,7 +482,6 @@ function money(v){
 }
 
 const grid = document.getElementById('plans-grid');
-const checkoutLinks = document.getElementById('checkoutLinks');
 
 PLANS.forEach(plan => {
   const card = document.createElement('div');
@@ -543,20 +496,6 @@ PLANS.forEach(plan => {
     <a class="btn btn-primary" href="${plan.checkout}" target="_blank" rel="noopener">Assinar ${plan.nome}</a>
   `;
   grid.appendChild(card);
-
-  const link = document.createElement('a');
-  link.className = 'checkout-link';
-  link.href = plan.checkout;
-  link.target = '_blank';
-  link.rel = 'noopener';
-  link.innerHTML = `
-    <span class="info">
-      <b>${plan.nome}</b>
-      <span>${plan.qty} ovos · ${money(precoNum(plan))} /semana</span>
-    </span>
-    <span class="go">Pagar no Asaas →</span>
-  `;
-  checkoutLinks.appendChild(link);
 });
 
 // ---------- WHATSAPP (só para dúvidas) ----------
